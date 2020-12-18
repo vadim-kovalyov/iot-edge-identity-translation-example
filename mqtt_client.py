@@ -3,12 +3,8 @@ edge module environmet.
 """
 
 import ssl
-import abc
 import logging
-import threading
 import os
-import io
-import time
 import paho.mqtt.client as mqtt
 from azure.iot.device.iothub import edge_hsm
 from azure.iot.device.common.auth import sastoken as auth
