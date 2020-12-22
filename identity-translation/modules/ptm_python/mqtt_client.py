@@ -53,7 +53,7 @@ def create_from_environment(**kwargs):
     try:
         server_verification_cert = hsm.get_certificate()
         context = ssl.SSLContext(ssl.PROTOCOL_TLS)
-        context.load_verify_locations(ca_data=server_verification_cert)
+        context.load_verify_locations(cadata=server_verification_cert)
     except edge_hsm.IoTEdgeError as e:
         new_err = OSError(
             "Unexpected failure getting server verification certificate")
@@ -61,11 +61,12 @@ def create_from_environment(**kwargs):
         raise new_err
 
     # Create mqtt client
-    client = mqtt.Client()
+    client = mqtt.Client(
+        client_id="{device_id}/{module_id}".format(device_id=device_id, module_id=module_id))
     client.tls_set_context(context)
     client.username_pw_set(
-        "{hostname}/{device_id}/{module_id}/?api-version={api_version}", token)
-    client.connect(gateway_hostname, port=8883)
+        "{hostname}/{device_id}/{module_id}/?api-version={api_version}"
+        .format(hostname=hostname, device_id=device_id, module_id=module_id, api_version=api_version), str(token))
 
     return client
 
