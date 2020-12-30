@@ -77,12 +77,29 @@
     "$edgeHub": {
       "properties.desired": {
         "schemaVersion": "1.0",
-        "routes": {
-          "ptm_pythonToIoTHub": "FROM /messages/modules/ptm_python/outputs/* INTO $upstream",
-          "ptm_csharpToIoTHub": "FROM /messages/modules/ptm_csharp/outputs/* INTO $upstream"
-        },
+        "routes": {},
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
+        },
+        "mqttBroker": {
+          "authorizations": [
+            {
+              "identities": [
+                "{{iot:identity}}"
+              ],
+              "allow": [
+                {
+                  "operations": [
+                    "mqtt:connect",
+                    "mqtt:publish"
+                  ],
+                  "resources": [
+                    "$iothub/#/messages/events"
+                  ]
+                }
+              ]
+            }
+          ]
         }
       }
     }
