@@ -22,7 +22,6 @@ def create_from_environment(**kwargs):
     hostname = os.environ["IOTEDGE_IOTHUBHOSTNAME"]
     device_id = os.environ["IOTEDGE_DEVICEID"]
     module_id = os.environ["IOTEDGE_MODULEID"]
-    gateway_hostname = os.environ["IOTEDGE_GATEWAYHOSTNAME"]
     module_generation_id = os.environ["IOTEDGE_MODULEGENERATIONID"]
     workload_uri = os.environ["IOTEDGE_WORKLOADURI"]
     api_version = os.environ["IOTEDGE_APIVERSION"]

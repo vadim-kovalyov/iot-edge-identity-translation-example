@@ -1,10 +1,18 @@
 FROM arm64v8/python:3.7-slim-buster
 
+# ruuvitag dependencies.
+RUN apt-get update \
+    && apt-get -y install bluetooth bluez sudo
+
 WORKDIR /app
 
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
 COPY . .
+
+# For demo purposes, started as root to make sure 
+# there are no permission issues.
+USER root
 
 CMD [ "python3", "-u", "./main.py" ]

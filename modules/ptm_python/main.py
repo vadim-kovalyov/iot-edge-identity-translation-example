@@ -6,16 +6,18 @@ from ruuvitag_sensor.ruuvi import RuuviTagSensor
 
 # A map of sensors' MAC to device id.
 # All devices need to be pre-created in IoT Hub.
-mac_to_device_id = {"AA:2C:6A:1E:59:3D": "device_id"}
+mac_to_device_id = {"AA:2C:6A:1E:59:3D": "sensor_1"}
 
 
-# The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
+    """ The callback for when the client receives a CONNACK response from the server.
+    """
     print("Upstream client connected with result code "+str(rc))
 
 
-# The callback for when a message is received from a sensor.
 def publish_upstream(client, mac, payload):
+    """ The callback for when a message is received from a sensor.
+    """
     if mac in mac_to_device_id:
         device_id = mac_to_device_id[mac]
         print("publishing message for {device_id} ({mac}).".format(
