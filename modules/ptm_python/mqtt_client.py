@@ -2,15 +2,16 @@
 edge module environmet.
 """
 
-import ssl
 import logging
 import os
+import ssl
+
 import paho.mqtt.client as mqtt
-from azure.iot.device.iothub import edge_hsm
 from azure.iot.device.common.auth import sastoken as auth
+from azure.iot.device.iothub import edge_hsm
 
 
-def create_from_environment(**kwargs):
+def create_from_environment(sastoken_ttl=3600):
     """Creates a paho.mqtt.client from edge module environmet. The returned object
     has proper authentication context (username and password) already set.
 
@@ -37,16 +38,13 @@ def create_from_environment(**kwargs):
     # Create SasToken
     uri = _form_sas_uri(hostname=hostname,
                         device_id=device_id, module_id=module_id)
-    token_ttl = kwargs.get("sastoken_ttl", 3600)
     try:
         token = auth.RenewableSasToken(
-            uri, hsm, ttl=token_ttl)
+            uri, hsm, ttl=sastoken_ttl)
     except auth.SasTokenError as e:
-        new_err = ValueError(
+        raise ValueError(
             "Could not create a SasToken using the values provided, or in the Edge environment"
-        )
-        new_err.__cause__ = e
-        raise new_err
+        ) from e
 
     # Create TLS context
     try:
@@ -61,19 +59,16 @@ def create_from_environment(**kwargs):
 
     # Create mqtt client
     client = mqtt.Client(
-        client_id="{device_id}/{module_id}".format(device_id=device_id, module_id=module_id))
+        client_id=f"{device_id}/{module_id}")
     client.tls_set_context(context)
     client.username_pw_set(
-        "{hostname}/{device_id}/{module_id}/?api-version={api_version}"
-        .format(hostname=hostname, device_id=device_id, module_id=module_id, api_version=api_version), str(token))
+        f"{hostname}/{device_id}/{module_id}/?api-version={api_version}", str(token))
 
     return client
 
 
 def _form_sas_uri(hostname, device_id, module_id=None):
     if module_id:
-        return "{hostname}/devices/{device_id}/modules/{module_id}".format(
-            hostname=hostname, device_id=device_id, module_id=module_id
-        )
+        return f"{hostname}/devices/{device_id}/modules/{module_id}"
     else:
-        return "{hostname}/devices/{device_id}".format(hostname=hostname, device_id=device_id)
+        return f"{hostname}/devices/{device_id}"
