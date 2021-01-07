@@ -47,6 +47,14 @@
                   }
                 }
               }
+            },
+            "env": {
+              "experimentalFeatures__mqttBrokerEnabled": {
+                "value": "true"
+              },
+              "experimentalFeatures__enabled": {
+                "value": "true"
+              }
             }
           }
         },
