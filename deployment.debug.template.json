@@ -9,7 +9,13 @@
           "settings": {
             "minDockerVersion": "v1.25",
             "loggingOptions": "",
-            "registryCredentials": {}
+            "registryCredentials": {
+              "registryName": {
+                "username": "$CONTAINER_REGISTRY_USERNAME",
+                "password": "$CONTAINER_REGISTRY_PASSWORD",
+                "address": "$CONTAINER_REGISTRY_ADDRESS"
+              }
+            }
           }
         },
         "systemModules": {
@@ -89,12 +95,32 @@
     },
     "$edgeHub": {
       "properties.desired": {
-        "schemaVersion": "1.0",
+        "schemaVersion": "1.2",
         "routes": {
-          "upstream": "FROM /messages/* INTO $upstream"
+          "Upstream": "FROM /messages/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
+        },
+        "mqttBroker": {
+          "authorizations": [
+            {
+              "identities": [
+                "{{iot:identity}}"
+              ],
+              "allow": [
+                {
+                  "operations": [
+                    "mqtt:connect",
+                    "mqtt:publish"
+                  ],
+                  "resources": [
+                    "$iothub/+/messages/events"
+                  ]
+                }
+              ]
+            }
+          ]
         }
       }
     }

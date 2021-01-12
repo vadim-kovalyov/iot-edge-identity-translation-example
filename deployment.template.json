@@ -60,12 +60,6 @@
               },
               "experimentalFeatures__enabled": {
                 "value": "true"
-              },
-              "BROKER_LOG": {
-                "value": "debug"
-              },
-              "RuntimeLogLevel": {
-                "value": "debug"
               }
             }
           }
@@ -96,7 +90,7 @@
     },
     "$edgeHub": {
       "properties.desired": {
-        "schemaVersion": "1.0",
+        "schemaVersion": "1.2",
         "routes": {
           "Upstream": "FROM /messages/* INTO $upstream"
         },
