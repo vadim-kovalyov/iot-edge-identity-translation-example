@@ -9,7 +9,7 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 
-COPY . .
+COPY app .
 
 # For demo purposes, started as root to make sure 
 # there are no permission issues.
