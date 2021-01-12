@@ -11,9 +11,9 @@
             "loggingOptions": "",
             "registryCredentials": {
               "registryName": {
-                  "username": "$CONTAINER_REGISTRY_USERNAME",
-                  "password": "$CONTAINER_REGISTRY_PASSWORD",
-                  "address": "$CONTAINER_REGISTRY_ADDRESS"
+                "username": "$CONTAINER_REGISTRY_USERNAME",
+                "password": "$CONTAINER_REGISTRY_PASSWORD",
+                "address": "$CONTAINER_REGISTRY_ADDRESS"
               }
             }
           }
@@ -77,7 +77,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULES.ptm_python.arm32v7}",
+              "image": "${MODULES.ptm_python}",
               "createOptions": {
                 "NetworkingConfig": {
                   "EndpointsConfig": {
@@ -98,7 +98,7 @@
       "properties.desired": {
         "schemaVersion": "1.0",
         "routes": {
-          "ptm_pythonToIoTHub": "FROM /messages/* INTO $upstream"
+          "Upstream": "FROM /messages/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200

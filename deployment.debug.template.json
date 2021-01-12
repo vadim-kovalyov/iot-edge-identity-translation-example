@@ -83,16 +83,6 @@
                 }
               }
             }
-          },
-          "ptm_csharp": {
-            "version": "1.0",
-            "type": "docker",
-            "status": "running",
-            "restartPolicy": "always",
-            "settings": {
-              "image": "${MODULES.ptm_csharp.debug}",
-              "createOptions": {}
-            }
           }
         }
       }
@@ -101,8 +91,7 @@
       "properties.desired": {
         "schemaVersion": "1.0",
         "routes": {
-          "ptm_pythonToIoTHub": "FROM /messages/modules/ptm_python/outputs/* INTO $upstream",
-          "ptm_csharpToIoTHub": "FROM /messages/modules/ptm_csharp/outputs/* INTO $upstream"
+          "upstream": "FROM /messages/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
