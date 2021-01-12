@@ -9,7 +9,7 @@ import mqtt_client
 
 # A map of sensors' MAC to device id.
 # All devices need to be pre-created in IoT Hub.
-mac_to_device_id = {"AA:2C:6A:1E:59:3D": "sensor_1"}
+mac_to_device_id = {"FE:36:EA:1E:62:AF": "sensor_1", "E4:F2:81:30:8D:52": "sensor_3"}
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
@@ -27,7 +27,7 @@ def publish_upstream(client, mac, payload):
         device_id = mac_to_device_id[mac]
         logging.info(f"publishing message for {device_id} ({mac}).")
         client.publish(
-            f"$iothub/{device_id}/messages/events", payload, qos=1)
+            f"$iothub/{device_id}/messages/events", str(payload), qos=1)
     else:
         logging.warning("ignoring message from an unknown sensor.")
 
