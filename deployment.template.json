@@ -9,7 +9,13 @@
           "settings": {
             "minDockerVersion": "v1.25",
             "loggingOptions": "",
-            "registryCredentials": {}
+            "registryCredentials": {
+              "registryName": {
+                  "username": "$CONTAINER_REGISTRY_USERNAME",
+                  "password": "$CONTAINER_REGISTRY_PASSWORD",
+                  "address": "$CONTAINER_REGISTRY_ADDRESS"
+              }
+            }
           }
         },
         "systemModules": {
@@ -54,6 +60,12 @@
               },
               "experimentalFeatures__enabled": {
                 "value": "true"
+              },
+              "BROKER_LOG": {
+                "value": "debug"
+              },
+              "RuntimeLogLevel": {
+                "value": "debug"
               }
             }
           }
@@ -65,7 +77,7 @@
             "status": "running",
             "restartPolicy": "always",
             "settings": {
-              "image": "${MODULES.ptm_python}",
+              "image": "${MODULES.ptm_python.arm32v7}",
               "createOptions": {
                 "NetworkingConfig": {
                   "EndpointsConfig": {
@@ -78,16 +90,6 @@
                 }
               }
             }
-          },
-          "ptm_csharp": {
-            "version": "1.0",
-            "type": "docker",
-            "status": "running",
-            "restartPolicy": "always",
-            "settings": {
-              "image": "${MODULES.ptm_csharp}",
-              "createOptions": {}
-            }
           }
         }
       }
@@ -95,7 +97,9 @@
     "$edgeHub": {
       "properties.desired": {
         "schemaVersion": "1.0",
-        "routes": {},
+        "routes": {
+          "ptm_pythonToIoTHub": "FROM /messages/* INTO $upstream"
+        },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
         },
