@@ -44,13 +44,21 @@ To learn more about this development environment, check out [this tutorial](http
 
 ### Modules
 
-This solution is made of one custom module:
+This sample is made of one custom module:
 
-- **PTM** - this Protocol Translation Module (PTM) module periodically collects data from registered RuuviTag sensors over Bluetooth and forward this data to the IoT Edge Hub MQTT broker on the telemetry channel of each RuuviTag sensor registered in IoT Hub.
+- **Protocol Translation Module (PTM)**: the PTM periodically collects data from registered RuuviTag sensors over Bluetooth and forward this data to the IoT Edge Hub MQTT broker on the telemetry channel of each RuuviTag sensor registered in IoT Hub. This module does not use [Azure IoT Device SDKs](https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-sdks#azure-iot-hub-device-sdks) but instead directly uses [Paho](https://pypi.org/project/paho-mqtt/) as a MQTT client.
 
 ### Data flow
 
-<TODO: describe the data flow, authorization policy and tokens from the workload API>
+In this sample, data is collected by the PTM module over Bluetooth from the sensors thanks to [this RuuviTag python library](https://github.com/ttu/ruuvitag-sensor) and sent to the edgeHub MQTT broker on the IoT Hub telemetry topic of each sensor. All messages received by the edgeHub are then forwarded to IoT Hub via a [route](https://docs.microsoft.com/azure/iot-edge/module-composition?view=iotedge-2020-11#declare-routes). The upstream protocol used between the IoT Edge device and IoT Hub is AMQP to multiplex all the upstream connections needed (one per sensor).
+
+### Authorization
+
+Several authorization mechanisms are used in this sample:
+
+- **MQTT broker authorization policy**:  The PTM is authorized to connect to the EdgeHub MQTT broker and to publish messages on each sensor IoT Hub telemetry topic. You can have a look at this authorization policy via the [deployment manifest](deployment.template.json), inthe edgeHub twin section.
+- **SAS token**: To send any messages to the edgeHub, a module must first get a token signed by the IoT Edge runtime. The Azure IoT Device SDKs typically take care of this step, but since they are not used here, the PTM gets a token itself by querying [the IoT Edge Workload API](https://github.com/Azure/iotedge/blob/c0bad527da979fc0d8d1c810474e5078dfee83ca/edgelet/workload/README.md). It also takes care of refreshing this token whenever needed.
+- **Parent/Child relationships**: For the edgeHub to send data to IoT Hub on behalf of child devices, the current IoT Hub APIs require a parent/child relationship to be registered in IoT Hub. This is why you must register each sensor device as a child of the IoT Edge device in IoT Hub the pre-requisites.
 
 ## Get started
 From your mac or PC:
