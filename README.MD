@@ -69,4 +69,4 @@ From your mac or PC:
 5. Deploy the solution to your device by right-clicking on the `config/deployment.json` file, select `Create Deployment for Single device` and choose your IoT Edge device
 6. Monitor the messages being sent to the Cloud by right-clicking on one of your sensor device registered in IoT hub from the VS Code IoT Edge Extension and select `Start Monitoring D2C Message`
 
-Note: To stop Device to Cloud (D2C) monitoring, use the `Azure IoT Hub: Stop monitoring D2C messages` command from the Command Palette (Ctrl+Shift+P).
+To stop Device to Cloud (D2C) monitoring, use the `Azure IoT Hub: Stop monitoring D2C messages` command from the Command Palette (Ctrl+Shift+P).
