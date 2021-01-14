@@ -11,9 +11,10 @@ from azure.iot.device.common.auth import sastoken as auth
 from azure.iot.device.iothub import edge_hsm
 
 
-class ModuleClient(object):
-
-    def __init__(self, hostname, device_id, module_id, module_generation_id, workload_uri, api_version, sastoken_ttl):
+class ModuleClient:
+    def __init__(self, hostname: str, device_id: str,
+                 module_id: str, module_generation_id: str,
+                 workload_uri: str, api_version: str, sastoken_ttl: int):
         self._username = f"{hostname}/{device_id}/{module_id}/?api-version={api_version}"
 
         # Use an HSM for authentication in the general case
@@ -54,15 +55,15 @@ class ModuleClient(object):
         self._token.refresh()
         self._mqtt_client.username_pw_set(self._username, str(self._token))
 
-    def connect(self, host, port=1883, keepalive=60):
+    def connect(self, host: str, port: int = 1883, keepalive: int = 60):
         """Connect to a remote broker.
         """
         self._mqtt_client.connect(host, port, keepalive)
 
-    def publish(self, topic, payload=None, qos=0, retain=False, properties=None):
+    def publish(self, topic: str, payload=None, qos: int = 0, retain: bool = False):
         """Publish a message on a topic.
         """
-        self._mqtt_client.publish(topic, payload, qos, retain, properties)
+        self._mqtt_client.publish(topic, payload, qos, retain)
 
     @property
     def on_connect(self):
@@ -87,7 +88,7 @@ class ModuleClient(object):
         self._mqtt_client.loop_forever()
 
 
-def create_from_environment(sastoken_ttl=3600):
+def create_from_environment(sastoken_ttl: int = 3600) -> ModuleClient:
     """Creates a paho.mqtt.client from edge module environmet. The returned object
     has proper authentication context (username and password) already set.
 
@@ -108,5 +109,5 @@ def create_from_environment(sastoken_ttl=3600):
     return client
 
 
-def _form_sas_uri(hostname, device_id, module_id):
+def _form_sas_uri(hostname, device_id, module_id) -> str:
     return f"{hostname}/devices/{device_id}/modules/{module_id}"
