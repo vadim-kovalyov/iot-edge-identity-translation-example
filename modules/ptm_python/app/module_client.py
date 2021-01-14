@@ -1,5 +1,5 @@
-"""This module contains a helper methods to create paho.mqtt.client from
-edge module environmet.
+"""This module contains a wrapper for paho.mqtt.client and a helper methods 
+to create one from edge module environmet.
 """
 
 import logging
