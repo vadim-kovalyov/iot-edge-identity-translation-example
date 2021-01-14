@@ -52,12 +52,14 @@ def main():
     def callback(data):
         publish_upstream(client, data[0], data[1])
 
+    # start the mqtt client loop.
+    logging.info("starting mqtt client loop.")
+    client.loop_start()
+
     # listening for sensors data.
     logging.info("listening for sensors data.")
     RuuviTagSensor.get_datas(callback)
 
-    # start the mqtt client loop.
-    client.loop_forever()
     logging.info("exiting.")
 
 

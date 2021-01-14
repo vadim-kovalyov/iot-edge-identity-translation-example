@@ -87,6 +87,11 @@ class ModuleClient:
         """
         self._mqtt_client.loop_forever()
 
+    def loop_start(self):
+        """This function call loop_start() on inner mqtt client. See paho.mqtt.client.loop_start
+        """
+        self._mqtt_client.loop_start()
+
 
 def create_from_environment(sastoken_ttl: int = 3600) -> ModuleClient:
     """Creates a paho.mqtt.client from edge module environmet. The returned object
