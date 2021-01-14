@@ -56,14 +56,14 @@ In this sample, data is collected by the PTM module over Bluetooth from the sens
 
 Several authorization mechanisms are used in this sample:
 
-- **MQTT broker authorization policy**:  The PTM is authorized to connect to the EdgeHub MQTT broker and to publish messages on each sensor IoT Hub telemetry topic. You can have a look at this authorization policy via the [deployment manifest](deployment.template.json), inthe edgeHub twin section.
+- **MQTT broker authorization policy**:  The PTM is authorized to connect to the EdgeHub MQTT broker and to publish messages on each sensor IoT Hub telemetry topic. You can have a look at this authorization policy via the [deployment manifest](deployment.template.json), in the edgeHub twin section.
 - **SAS token**: To send any messages to the edgeHub, a module must first get a token signed by the IoT Edge runtime. The Azure IoT Device SDKs typically take care of this step, but since they are not used here, the PTM gets a token itself by querying [the IoT Edge Workload API](https://github.com/Azure/iotedge/blob/c0bad527da979fc0d8d1c810474e5078dfee83ca/edgelet/workload/README.md). It also takes care of refreshing this token whenever needed.
 - **Parent/Child relationships**: For the edgeHub to send data to IoT Hub on behalf of child devices, the current IoT Hub APIs require a parent/child relationship to be registered in IoT Hub. This is why you must register each sensor device as a child of the IoT Edge device in IoT Hub the pre-requisites.
 
 ## Get started
 From your mac or PC:
 1. Clone this repository
-2. Register the MAC addresses and associated IoT hub device names of your RuuviTag sensors by editing the `./modules/ptm_python/main.py` file and assigning to the `mac_to_device_id` variable the list of MAC addresses, device ids pairs in the format `{"MAC_address_sensor_1": "device_id_sensor_1", "MAC_address_sensor_2": "device_id_sensor_2", ...}`
+2. Register the MAC addresses and associated IoT hub device names of your RuuviTag sensors by editing the `./modules/ptm_python/app/main.py` file and assigning to the `mac_to_device_id` variable the list of MAC addresses, device ids pairs in the format `{"MAC_address_sensor_1": "device_id_sensor_1", "MAC_address_sensor_2": "device_id_sensor_2", ...}`
 3. Update the `.env` file with the values for your container registry
 4. Build the entire solution by right-clicking on the `deployment.template.json` file and select `Build and push IoT Edge Solution`
 5. Deploy the solution to your device by right-clicking on the `config/deployment.json` file, select `Create Deployment for Single device` and choose your IoT Edge device
