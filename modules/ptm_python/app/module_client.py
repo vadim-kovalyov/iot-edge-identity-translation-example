@@ -7,8 +7,8 @@ import os
 import ssl
 
 import paho.mqtt.client as mqtt
-from azure.iot.device.common.auth import sastoken as auth
-from azure.iot.device.iothub import edge_hsm
+import edge.sastoken as auth
+import edge.edge_hsm as edge_hsm
 
 
 class ModuleClient:
@@ -28,23 +28,14 @@ class ModuleClient:
         # Create SasToken
         uri = _form_sas_uri(hostname=hostname,
                             device_id=device_id, module_id=module_id)
-        try:
-            self._token = auth.RenewableSasToken(
-                uri, hsm, ttl=sastoken_ttl)
-        except auth.SasTokenError as e:
-            raise ValueError(
-                "Could not create a SasToken using the values provided, or in the Edge environment"
-            ) from e
+
+        self._token = auth.RenewableSasToken(
+            uri, hsm, ttl=sastoken_ttl)
 
         # Create TLS context
-        try:
-            server_verification_cert = hsm.get_certificate()
-            context = ssl.SSLContext(ssl.PROTOCOL_TLS)
-            context.load_verify_locations(cadata=server_verification_cert)
-        except edge_hsm.IoTEdgeError as e:
-            raise OSError(
-                "Unexpected failure getting server verification certificate"
-            ) from e
+        server_verification_cert = hsm.get_certificate()
+        context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+        context.load_verify_locations(cadata=server_verification_cert)
 
         # Create mqtt client
         self._mqtt_client = mqtt.Client(client_id=f"{device_id}/{module_id}")
@@ -93,7 +84,7 @@ class ModuleClient:
         self._mqtt_client.loop_start()
 
 
-def create_from_environment(sastoken_ttl: int = 3600) -> ModuleClient:
+def create_from_environment(sastoken_ttl: int = 30) -> ModuleClient:
     """Creates a paho.mqtt.client from edge module environmet. The returned object
     has proper authentication context (username and password) already set.
 
