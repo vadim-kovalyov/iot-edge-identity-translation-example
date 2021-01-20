@@ -84,7 +84,7 @@ class ModuleClient:
         self._mqtt_client.loop_start()
 
 
-def create_from_environment(sastoken_ttl: int = 30) -> ModuleClient:
+def create_from_environment(sastoken_ttl: int = 3600) -> ModuleClient:
     """Creates a paho.mqtt.client from edge module environmet. The returned object
     has proper authentication context (username and password) already set.
 
