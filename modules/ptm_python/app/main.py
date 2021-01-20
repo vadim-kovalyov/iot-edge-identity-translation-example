@@ -9,8 +9,8 @@ import module_client
 
 # A map of sensors' MAC to device id.
 # All devices need to be pre-created in IoT Hub.
-authorized_devices = [('FE:36:EA:1E:62:AF', 'sensor_1'),
-                      ('E4:F2:81:30:8D:52', 'sensor_3')]
+authorized_devices = {"FE:36:EA:1E:62:AF": "sensor_1",
+                      "E4:F2:81:30:8D:52": "sensor_3"}
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -35,15 +35,13 @@ def publish_upstream(client, mac, payload):
     """
 
     # This loop to check for authorized devices should not be needed given that it should already be enforced by the ruuvitag library
-    is_authorized_device = False
-    for sensor in authorized_devices:
-        if mac == sensor[0]:
-            is_authorized_device = True
-            logging.info(
-                f"publishing message for {sensor[1]} [{mac}]: {str(payload)}.")
-            client.publish(
-                f"$iothub/{sensor[1]}/messages/events", str(payload), qos=1)
-    if(is_authorized_device == False):
+    if mac in authorized_devices:
+        device_id = authorized_devices[mac]
+        logging.info(
+            f"publishing message for {device_id} [{mac}]: {str(payload)}.")
+        client.publish(
+            f"$iothub/{device_id}/messages/events", str(payload), qos=1)
+    else:
         logging.warning(
             f"ignoring message from an unknown sensor (MAC address: {mac}).")
 
@@ -67,8 +65,7 @@ def main():
 
     # listening for sensors data.
     logging.info("listening for sensors data.")
-    RuuviTagSensor.get_datas(callback, [sensor[0]
-                                        for sensor in authorized_devices])
+    RuuviTagSensor.get_datas(callback, list(authorized_devices.keys()))
 
     logging.info("exiting.")
 
