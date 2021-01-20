@@ -34,7 +34,8 @@ def publish_upstream(client, mac, payload):
     """ The callback for when a message is received from a sensor.
     """
 
-    # This loop to check for authorized devices should not be needed given that it should already be enforced by the ruuvitag library
+    # This check for authorized devices should not be needed
+    # given that it should already be enforced by the ruuvitag library
     if mac in authorized_devices:
         device_id = authorized_devices[mac]
         logging.info(
