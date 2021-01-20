@@ -83,6 +83,11 @@
                   "Privileged": true
                 }
               }
+            },
+            "env": {
+              "AUTHORIZED_DEVICES": {
+                "value": "{ \"FE:36:EA:1E:62:AF\": \"sensor_1\", \"E4:F2:81:30:8D:52\": \"sensor_3\" }"
+              }
             }
           }
         }

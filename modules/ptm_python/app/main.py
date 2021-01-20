@@ -1,3 +1,5 @@
+
+import json
 import logging
 import os
 import sys
@@ -9,8 +11,7 @@ import module_client
 
 # A map of sensors' MAC to device id.
 # All devices need to be pre-created in IoT Hub.
-authorized_devices = {"FE:36:EA:1E:62:AF": "sensor_1",
-                      "E4:F2:81:30:8D:52": "sensor_3"}
+authorized_devices = json.loads(os.environ["AUTHORIZED_DEVICES"])
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
