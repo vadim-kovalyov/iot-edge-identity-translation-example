@@ -63,10 +63,15 @@ Several authorization mechanisms are used in this sample:
 ## Get started
 From your mac or PC:
 1. Clone this repository
-2. Register the MAC addresses and associated IoT hub device names of your RuuviTag sensors by editing the `./modules/ptm_python/app/main.py` file and assigning to the `mac_to_device_id` variable the list of MAC addresses, device ids pairs in the format `{"MAC_address_sensor_1": "device_id_sensor_1", "MAC_address_sensor_2": "device_id_sensor_2", ...}`
-3. Update the `.env` file with the values for your container registry
+2. Register the MAC addresses and associated IoT hub device names of your RuuviTag sensors by editing the `./deployment.template.json` file and assigning to the `AUTHORIZED_DEVICES` env variable the map of MAC addresses, device ids pairs in the format `{"MAC_address_sensor_1": "device_id_sensor_1", "MAC_address_sensor_2": "device_id_sensor_2", ...}`. Don't forget to encode double quotes.
+3. Add the `.env` file to the sample root folder with the values for your container registry
+    ```
+    CONTAINER_REGISTRY_ADDRESS="<address>"
+    CONTAINER_REGISTRY_USERNAME="<username>"
+    CONTAINER_REGISTRY_PASSWORD="<password>"
+    ```
 4. Build the entire solution by right-clicking on the `deployment.template.json` file and select `Build and push IoT Edge Solution`
-5. Deploy the solution to your device by right-clicking on the `config/deployment.json` file, select `Create Deployment for Single device` and choose your IoT Edge device
+5. Deploy the solution to your device by right-clicking on the `./config/deployment.json` file, select `Create Deployment for Single device` and choose your IoT Edge device
 6. Monitor the messages being sent to the Cloud by right-clicking on one of your sensor device registered in IoT hub from the VS Code IoT Edge Extension and select `Start Monitoring D2C Message`
 
 To stop Device to Cloud (D2C) monitoring, use the `Azure IoT Hub: Stop monitoring D2C messages` command from the Command Palette (Ctrl+Shift+P).
